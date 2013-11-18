@@ -570,13 +570,11 @@ void populate_func_lookup_table( lua_State* L, int _i, char const* name_)
 lua_State* luaG_newstate( lua_State* _from, int const _on_state_create, char const* libs)
 {
 	// reuse alloc function from the originating state
-	void* allocUD;
-	lua_Alloc allocF = lua_getallocf( _from, &allocUD);
-	lua_State* L = lua_newstate( allocF, allocUD);
+	lua_State* L = luaL_newstate();
 
 	if( L == NULL)
 	{
-		(void) luaL_error( _from, "'lua_newstate()' failed; out of memory");
+		(void) luaL_error( _from, "'luaL_newstate()' failed; out of memory");
 	}
 
 	// we'll need this everytime we transfer some C function from/to this state
