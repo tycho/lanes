@@ -567,8 +567,10 @@ void close_keepers( void)
 char const* init_keepers( lua_State* L)
 {
 	int i;
+#ifndef USE_LUAJIT
 	void* allocUD;
 	lua_Alloc allocF = lua_getallocf( L, &allocUD);
+#endif
 
 	STACK_CHECK( L);
 	lua_getfield( L, 1, "nb_keepers");
@@ -580,10 +582,14 @@ char const* init_keepers( lua_State* L)
 	GKeepers = malloc( GNbKeepers * sizeof( struct s_Keeper));
 	for( i = 0; i < GNbKeepers; ++ i)
 	{
+#ifdef USE_LUAJIT
+		lua_State* K = luaL_newstate();
+#else
 		lua_State* K = lua_newstate( allocF, allocUD);
+#endif
 		if( K == NULL)
 		{
-			(void) luaL_error( L, "'lua_newstate()' failed while creating keeper state; out of memory");
+			(void) luaL_error( L, "Lua state allocation failed while creating keeper state; out of memory");
 		}
 		STACK_CHECK( K);
 
