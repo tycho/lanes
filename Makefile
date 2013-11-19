@@ -47,14 +47,13 @@ _PREFIX=LUA_CPATH="./src/?.$(_SO)" LUA_PATH="./src/?.lua;./tests/?.lua"
 all: $(_TARGET_SO)
 
 $(_TARGET_SO): src/*.lua src/*.c src/*.h
-	cd src && $(MAKE) LUA=$(LUA)
+	$(MAKE) -C src LUA=$(LUA)
 
 clean:
-	cd src && $(MAKE) clean
+	$(MAKE) -C src LUA=$(LUA) clean
 
-debug:
-	$(MAKE) clean
-	cd src && $(MAKE) LUA=$(LUA) OPT_FLAGS="-O0 -g"
+debug: clean
+	$(MAKE) -C src LUA=$(LUA) OPT_FLAGS="-O0 -g"
 	@echo ""
 	@echo "** Now, try 'make repetitive' or something and if it crashes, 'gdb $(LUA) ...core file...'"
 	@echo "   Then 'bt' for a backtrace."
@@ -70,7 +69,7 @@ gdb:
 #--- LuaRocks automated build ---
 #
 rock:
-	cd src && $(MAKE) LUAROCKS=1 CFLAGS="$(CFLAGS)" LIBFLAG="$(LIBFLAG)" LUA=$(LUA)
+	$(MAKE) -C src LUAROCKS=1 CFLAGS="$(CFLAGS)" LIBFLAG="$(LIBFLAG)" LUA=$(LUA)
 
 
 #--- Testing ---
