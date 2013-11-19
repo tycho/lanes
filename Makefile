@@ -77,6 +77,7 @@ rock:
 #
 test:
 	$(MAKE) errhangtest
+	$(MAKE) thread_safe_malloc
 	$(MAKE) irayo_recursive
 	$(MAKE) irayo_closure
 	$(MAKE) basic
@@ -162,6 +163,9 @@ appendud: tests/appendud.lua $(_TARGET_SO)
 	$(_PREFIX) $(LUA) $<
 
 func_is_string: tests/func_is_string.lua $(_TARGET_SO)
+	$(_PREFIX) $(LUA) $<
+
+thread_safe_malloc: tests/thread_safe_malloc.lua $(_TARGET_SO)
 	$(_PREFIX) $(LUA) $<
 
 linda_perf: tests/linda_perf.lua $(_TARGET_SO)
